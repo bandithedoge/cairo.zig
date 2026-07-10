@@ -12,37 +12,32 @@
 
         // https://github.com/allyourcodebase/pixman/pull/1
         .pixman = .{
-            .url = "https://github.com/bandithedoge/pixman/archive/28698cec3be55d668df7895f447e78a1a899e55a.tar.gz",
-            .hash = "pixman-0.0.0-9hepuP4HAABpFJXcFsgmuPOzQrHzX7fs88Fn4D8TuBUV",
+            .url = "git+https://github.com/bandithedoge/pixman.git#b1e02c25b2bc8dad1d7bd4f61a9885b3f80dac1f",
+            .hash = "pixman-0.0.0-9hepuDQIAADdAnUWQ1ivXJK8EOA8tpLl4a8_vPlK9ra-",
             .lazy = true,
         },
 
         .freetype = .{
-            .url = "https://github.com/allyourcodebase/freetype/archive/9d847affbd224cf6a7303ad6d98715e3675ef78c.tar.gz",
-            .hash = "freetype-2.13.3-C3-WdeyJAAD9z8BeYYQ8N3gNlPI9NvHRxg5039S5vhz7",
+            .url = "git+https://github.com/allyourcodebase/freetype.git#884fd2235e6ae1ec4306eda30b3259f20930ed2e",
+            .hash = "freetype-2.14.3-C3-WdXSKAAB-kHs4qgRoeoFnRkNQn6M_SSlUGZ6ywgBQ",
             .lazy = true,
         },
 
         .zlib = .{
-            .url = "https://github.com/allyourcodebase/zlib/archive/61e7df7e996ec5a5f13a653db3c419adb340d6ef.tar.gz",
-            .hash = "zlib-1.3.1-ZZQ7lbYMAAB1hTSOKSXAKAgHsfDcyWNH_37ojw5WSpgR",
+            .url = "git+https://github.com/allyourcodebase/zlib.git#d3b5519d3b73616a6bfece0712f080029d2a9244",
+            .hash = "zlib-1.3.2-ZZQ7lc8NAAAHm9MDfplvwoesXvk4tVm6VCsiI8KnIbT0",
             .lazy = true,
         },
 
         .libpng = .{
-            .url = "https://github.com/allyourcodebase/libpng/archive/d512607515687aa60b975d6a191aef9a692dac87.zip",
-            .hash = "libpng-1.6.50-oiaFGt4qAAB_vzrtvz9hA7_UiBW4arSaMVGc7ekKMCZ2",
-            .lazy = true,
-        },
-
-        .fontconfig = .{
-            .path = "pkg/fontconfig",
+            .url = "git+https://github.com/allyourcodebase/libpng.git#e123eca2140de78f1017a46c24e330fb3024fc58",
+            .hash = "libpng-1.6.57-oiaFGuYqAAB3CK1mjIzXHn2Z3EVV9okuko-VH23OOSV_",
             .lazy = true,
         },
 
         .expat = .{
-            .url = "https://github.com/allyourcodebase/libexpat/archive/2f2954d71f91142359fbbb158145bda7d36783d7.tar.gz",
-            .hash = "libexpat-2.7.1-y_akI-g7AABOKMRAFAL1BU60IqpRNHZXrUB_2Hu16Vsl",
+            .url = "git+https://github.com/allyourcodebase/libexpat.git?ref=2.7.1-3#662b7d1cb5f347598d4619d125be317cc2c52b62",
+            .hash = "libexpat-2.7.1-3-y_akI_s7AABtuMADtwTTJGOxx8iY5ZC9T8EON6cjvbNw",
             .lazy = true,
         },
     },
