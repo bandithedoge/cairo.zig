@@ -307,9 +307,8 @@ pub fn build(b: *std.Build) !void {
     }
 
     if (use_xlib) {
-        lib.root_module.linkSystemLibrary("x11", .{});
-        lib.root_module.linkSystemLibrary("xext", .{});
-        // lib.linkSystemLibrary("xproto");
+        lib.root_module.linkSystemLibrary("X11", .{});
+        lib.root_module.linkSystemLibrary("Xext", .{});
         feature_config.addValues(.{ .CAIRO_HAS_XLIB_SURFACE = 1 });
 
         config.addValues(.{
@@ -327,7 +326,7 @@ pub fn build(b: *std.Build) !void {
         try boilerplate_sources.append(b.allocator, "cairo-boilerplate-xlib.c");
 
         if (use_xrender) {
-            lib.root_module.linkSystemLibrary("xrender", .{});
+            lib.root_module.linkSystemLibrary("Xrender", .{});
 
             config.addValues(.{
                 .HAVE_XRENDERCREATESOLIDFILL = 1,
@@ -350,7 +349,7 @@ pub fn build(b: *std.Build) !void {
         });
 
         if (use_xlib) {
-            lib.root_module.linkSystemLibrary("x11-xcb", .{});
+            lib.root_module.linkSystemLibrary("X11-xcb", .{});
             try cairo_sources.append(b.allocator, "cairo-xlib-xcb-surface.c");
             feature_config.addValues(.{ .CAIRO_HAS_XLIB_XCB_FUNCTIONS = 1 });
         }
