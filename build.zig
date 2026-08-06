@@ -26,6 +26,13 @@ pub fn build(b: *std.Build) !void {
 
     const cairo = b.dependency("cairo", .{});
 
+    const headers = b.addNamedWriteFiles("headers");
+    _ = headers.addCopyDirectory(
+        cairo.path("src"),
+        "",
+        .{ .include_extensions = &.{"h"} },
+    );
+
     const lib = b.addLibrary(.{
         .name = "cairo",
         .root_module = b.createModule(.{
@@ -491,6 +498,7 @@ pub fn build(b: *std.Build) !void {
     lib.installHeadersDirectory(cairo.path("src"), "", .{});
     lib.installConfigHeader(config);
     lib.installConfigHeader(feature_config);
+    _ = headers.addCopyFile(feature_config.getOutputFile(), "cairo-features.h");
 
     b.installArtifact(lib);
 
