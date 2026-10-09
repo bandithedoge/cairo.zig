@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) !void {
     const use_dwrite = b.option(bool, "use_dwrite", "Use DirectWrite font backend (only affects Windows)") orelse (target.result.os.tag == .windows);
     const use_glib = b.option(bool, "use_glib", "Use glib") orelse (target.result.os.tag == .linux or target.result.os.tag.isBSD());
     const use_spectre = b.option(bool, "use_spectre", "Use libspectre") orelse use_zlib;
-    const symbol_lookup = b.option(bool, "symbol_lookup", "Symbol lookup in debug utils via binutils/bfd") orelse (optimize == .Debug);
+    const symbol_lookup = b.option(bool, "symbol_lookup", "Symbol lookup in debug utils via binutils/bfd") orelse (optimize == .debug);
 
     const cairo = b.dependency("cairo", .{});
 
@@ -87,7 +87,7 @@ pub fn build(b: *std.Build) !void {
         "-D_GNU_SOURCE",
         "-fno-sanitize=undefined",
     });
-    if (optimize != .Debug) {
+    if (optimize != .debug) {
         try c_flags.append(b.allocator, "-Wp,-D_FORTIFY_SOURCE=2");
     }
 
@@ -518,45 +518,43 @@ pub fn build(b: *std.Build) !void {
     cairomissing.installHeadersDirectory(cairo.path("util/cairo-missing"), "", .{});
     cairomissing.root_module.linkLibrary(lib);
 
-    const cairoboilerplate = b.addLibrary(.{
-        .name = "cairoboilerplate",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-            .link_libc = true,
-        }),
-    });
-
-    cairoboilerplate.root_module.addCSourceFiles(.{
-        .files = boilerplate_sources.items,
-        .root = cairo.path("boilerplate"),
-    });
-    cairoboilerplate.root_module.addIncludePath(cairo.path("boilerplate"));
-    cairoboilerplate.root_module.linkLibrary(lib);
-    cairoboilerplate.installHeadersDirectory(cairo.path("boilerplate"), "", .{});
-
-    // TODO: don't litter the source directory
-    const boilerplate_constructors = b.path("cairo-boilerplate-constructors.c");
-
-    const python = try b.findProgram(&.{"python3"}, &.{});
-
-    const make_boilerplate_constructors = b.addSystemCommand(try std.mem.concat(
-        b.allocator,
-        []const u8,
-        &.{
-            &.{ python, "make-cairo-boilerplate-constructors.py", boilerplate_constructors.getPath(b) },
-            boilerplate_sources.items,
-        },
-    ));
-    make_boilerplate_constructors.setCwd(cairo.path("boilerplate"));
-
-    cairoboilerplate.step.dependOn(&make_boilerplate_constructors.step);
-    cairoboilerplate.root_module.addCSourceFile(.{
-        .file = boilerplate_constructors,
-        .flags = c_flags.items,
-    });
-
     if (build_tests) {
+        const cairoboilerplate = b.addLibrary(.{
+            .name = "cairoboilerplate",
+            .root_module = b.createModule(.{
+                .target = target,
+                .optimize = optimize,
+                .link_libc = true,
+            }),
+        });
+
+        cairoboilerplate.root_module.addCSourceFiles(.{
+            .files = boilerplate_sources.items,
+            .root = cairo.path("boilerplate"),
+        });
+        cairoboilerplate.root_module.addIncludePath(cairo.path("boilerplate"));
+        cairoboilerplate.root_module.linkLibrary(lib);
+        cairoboilerplate.installHeadersDirectory(cairo.path("boilerplate"), "", .{});
+
+        // TODO: don't litter the source directory
+        const python = b.findProgram(.{ .names = &.{"python3"} }) orelse @panic("python3 is required for tests");
+
+        const make_boilerplate_constructors = b.addSystemCommand(try std.mem.concat(
+            b.allocator,
+            []const u8,
+            &.{
+                &.{ python, "make-cairo-boilerplate-constructors.py", "cairo-boilerplate-constructors.c" },
+                boilerplate_sources.items,
+            },
+        ));
+        make_boilerplate_constructors.setCwd(cairo.path("boilerplate"));
+
+        cairoboilerplate.step.dependOn(&make_boilerplate_constructors.step);
+        cairoboilerplate.root_module.addCSourceFile(.{
+            .file = b.path("cairo-boilerplate-constructors.c"),
+            .flags = c_flags.items,
+        });
+
         if (build_any2ppm) {
             const any2ppm = b.addExecutable(.{
                 .name = "any2ppm",
@@ -604,20 +602,18 @@ pub fn build(b: *std.Build) !void {
         });
 
         // TODO: don't litter the source directory
-        const test_constructors = b.path("cairo-test-constructors.c");
-
         const make_test_constructors = b.addSystemCommand(try std.mem.concat(
             b.allocator,
             []const u8,
             &.{
-                &.{ python, "make-cairo-test-constructors.py", test_constructors.getPath(b) }, test_sources.items,
+                &.{ python, "make-cairo-test-constructors.py", "cairo-test-constructors.c" }, test_sources.items,
             },
         ));
         make_test_constructors.cwd = cairo.path("test");
 
         cairo_test_suite.step.dependOn(&make_test_constructors.step);
         cairo_test_suite.root_module.addCSourceFile(.{
-            .file = test_constructors,
+            .file = b.path("cairo-test-constructors.c"),
             .flags = c_flags.items,
         });
 

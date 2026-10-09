@@ -2,7 +2,7 @@
     .name = .cairo_zig,
     .version = "1.18.4",
     .fingerprint = 0x71e19aedf148bc19,
-    .minimum_zig_version = "0.15.1",
+    .minimum_zig_version = "0.17.0",
 
     .dependencies = .{
         .cairo = .{
@@ -36,8 +36,8 @@
         },
 
         .expat = .{
-            .url = "git+https://github.com/allyourcodebase/libexpat.git?ref=2.7.1-3#662b7d1cb5f347598d4619d125be317cc2c52b62",
-            .hash = "libexpat-2.7.1-3-y_akI_s7AABtuMADtwTTJGOxx8iY5ZC9T8EON6cjvbNw",
+            .url = "git+https://github.com/allyourcodebase/libexpat.git#892b8b923bb1cf2983fe2f72fb4648c74a9918cd",
+            .hash = "libexpat-2.7.1-3-y_akI147AACVHv6Ee16TCu2hqcVyJA2w2TtjVJR7n21k",
             .lazy = true,
         },
     },

@@ -32,7 +32,7 @@
           devShells.default = pkgs.mkShell.override { inherit (zig') stdenv; } {
             packages = with pkgs; [
               zig'
-              zls'
+              zls
 
               (symlinkJoin {
                 name = "librsvg";
